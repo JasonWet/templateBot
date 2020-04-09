@@ -2,7 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { connect } = require('mongoose');
 //Get the prefix and token from the conf.json
-const { prefix, token } = require('./conf.json');
+const { token } = require('./conf.json');
 //Get the GuildModel from the models directory
 const GuildModel = require('./models/Guild');
 //Register the client and include partials for reactions
@@ -15,10 +15,22 @@ for (const file of commandFiles) {
    const command = require(`./commands/${file}`);
    client.commands.set(command.name, command);
 }
+//Used Database Variables
+let id;
+let prefix;
 //client on ready event (when the bot starts)
 client.once('ready', () => {
    //Log to console that the bot is ready
-   console.log('Ready!');
+   console.log(`${client.user.username} is now ready!`);
+   (async () => {
+      try {
+         const req = await GuildModel.findOne({id: client.guilds.cache.map(guild => guild.id)});
+         id = req.id;
+         prefix = req.prefix;
+      } catch (e) {
+         console.log(e.stack)
+      }
+   })();
 });
 //Guild Create Event (When the bot joins a guild it logs the guild into the database)
 client.on('guildCreate',  async guild => {
@@ -49,14 +61,12 @@ client.on('message', message => {
    //Try to execute the command, if it doesn't work send the error message
    try {
       command.execute(message, args);
+      console.log(`${message.author.username} ran the command ${botPrefix}${commandName}`)
    } catch (error) {
       console.error(error);
       //Sent when a command does not work and sends the error to the console
       message.reply('there was an error trying to execute that command!');
    }
-   (async () => {
-
-   })();
 });
 
 //Message Reaction Add Event (When a user adds a reaction to a message)
