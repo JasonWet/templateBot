@@ -4,6 +4,10 @@ const Guild = Schema({
    //id within the schema
    //id is logged when the bot joins the guild
    id: String,
+   prefix: {
+      default: "!",
+      type: String,
+   },
 });
 
 module.exports = model('Guild', Guild);
