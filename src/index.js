@@ -22,11 +22,15 @@ let prefix;
 client.once('ready', () => {
    //Log to console that the bot is ready
    console.log(`${client.user.username} is now ready!`);
+   //Fetch information from the database upon startup
    (async () => {
       try {
+         //Fetch the Model for each guild the bot is in
          const req = await GuildModel.findOne({id: client.guilds.cache.map(guild => guild.id)});
+         //Request the information
          id = req.id;
          prefix = req.prefix;
+         console.log(`Startup Information Fetched`)
       } catch (e) {
          console.log(e.stack)
       }
@@ -46,6 +50,18 @@ client.on('guildCreate',  async guild => {
 });
 //Message Listener
 client.on('message', message => {
+   if (message.content === "!sync" || !message.author.bot) {
+      (async () => {
+         try {
+            const req = await GuildModel.findOne({id: message.guild.id});
+            id = req.id;
+            prefix = req.prefix;
+            console.log(`${message.guild.id} database/information in use is now in sync`)
+         } catch (e) {
+            console.log(e.stack)
+         }
+      })();
+   }
    //If a message does not start with the prefix don't run it as a command
    if (!message.content.startsWith(prefix) || message.author.bot) return;
    //Set the command prefix
@@ -61,11 +77,14 @@ client.on('message', message => {
    //Try to execute the command, if it doesn't work send the error message
    try {
       command.execute(message, args);
-      console.log(`${message.author.username} ran the command ${botPrefix}${commandName}`)
+      console.log(`${message.author.username} ran the command ${prefix}${commandName}`)
    } catch (error) {
+      //Tell the user who executed the command that there was an error
+      message.reply('There was an error trying to execute that command! Please contact the bot developer.');
+      //state which command caused the error and in what guild it originated from
+      console.log(`${prefix}${commandName} had an error in (${message.guild.id})`);
+      //Log the command error
       console.error(error);
-      //Sent when a command does not work and sends the error to the console
-      message.reply('there was an error trying to execute that command!');
    }
 });
 
