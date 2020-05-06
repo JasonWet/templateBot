@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
    //Register a command by the name with a command usage, any aliases (blank if none) and a description
    name: 'test',

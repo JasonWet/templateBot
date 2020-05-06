@@ -1,10 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { connect } = require('mongoose');
 //Get the prefix and token from the conf.json
-const { token } = require('./conf.json');
-//Get the GuildModel from the models directory
-const GuildModel = require('./models/Guild');
+const { token, prefix } = require('./conf.json');
 //Register the client and include partials for reactions
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER']});
 client.commands = new Discord.Collection();
@@ -15,53 +12,13 @@ for (const file of commandFiles) {
    const command = require(`./commands/${file}`);
    client.commands.set(command.name, command);
 }
-//Used Database Variables
-let id;
-let prefix;
 //client on ready event (when the bot starts)
 client.once('ready', () => {
    //Log to console that the bot is ready
    console.log(`${client.user.username} is now ready!`);
-   //Fetch information from the database upon startup
-   (async () => {
-      try {
-         //Fetch the Model for each guild the bot is in
-         const req = await GuildModel.findOne({id: client.guilds.cache.map(guild => guild.id)});
-         //Request the information
-         id = req.id;
-         prefix = req.prefix;
-         console.log(`Startup Information Fetched`)
-      } catch (e) {
-         console.log(e.stack)
-      }
-   })();
-});
-//Guild Create Event (When the bot joins a guild it logs the guild into the database)
-client.on('guildCreate',  async guild => {
-   try {
-      const doc = new GuildModel({ id: guild.id });
-      //Log the guild into the database (save)
-      await doc.save();
-      //Tell console a guild has been created
-      console.log(`Guild Created (${guild.id})`)
-   } catch (e) {
-      console.log(e.stack)
-   }
 });
 //Message Listener
 client.on('message', message => {
-   if (message.content === "!sync" || !message.author.bot) {
-      (async () => {
-         try {
-            const req = await GuildModel.findOne({id: message.guild.id});
-            id = req.id;
-            prefix = req.prefix;
-            console.log(`${message.guild.id} database/information in use is now in sync`)
-         } catch (e) {
-            console.log(e.stack)
-         }
-      })();
-   }
    //If a message does not start with the prefix don't run it as a command
    if (!message.content.startsWith(prefix) || message.author.bot) return;
    //Set the command prefix
@@ -102,12 +59,6 @@ client.on(`guildMemberRemove`, async member => {
 });
 //Connections + Logins
 (async () => {
-   //Connect to the MongoDB
-   await connect('Database URL', {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true
-   });
    //Login to the bot with the token
    return client.login(token);
 })();
