@@ -16,6 +16,7 @@ for (const file of commandFiles) {
    client.commands.set(command.name, command);
 }
 //Used Database Variables
+let guild = client.guilds.cache.map(guild => guild.id);
 let id;
 let prefix;
 //client on ready event (when the bot starts)
@@ -26,7 +27,7 @@ client.once('ready', () => {
    (async () => {
       try {
          //Fetch the Model for each guild the bot is in
-         const req = await GuildModel.findOne({id: client.guilds.cache.map(guild => guild.id)});
+         const req = await GuildModel.find({id: guild});
          //Request the information
          id = req.id;
          prefix = req.prefix;
@@ -50,6 +51,7 @@ client.on('guildCreate',  async guild => {
 });
 //Message Listener
 client.on('message', message => {
+   /*
    if (message.content === "!sync" || !message.author.bot) {
       (async () => {
          try {
@@ -62,6 +64,7 @@ client.on('message', message => {
          }
       })();
    }
+    */
    //If a message does not start with the prefix don't run it as a command
    if (!message.content.startsWith(prefix) || message.author.bot) return;
    //Set the command prefix
