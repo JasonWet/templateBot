@@ -2,7 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { connect } = require('mongoose');
 //Get the prefix and token from the conf.json
-const { token } = require('./conf.json');
+const { token, databaseURL } = require('./conf.json');
 //Get the GuildModel from the models directory
 const GuildModel = require('./models/Guild');
 //Register the client and include partials for reactions
@@ -23,19 +23,6 @@ let prefix;
 client.once('ready', () => {
    //Log to console that the bot is ready
    console.log(`${client.user.username} is now ready!`);
-   //Fetch information from the database upon startup
-   (async () => {
-      try {
-         //Fetch the Model for each guild the bot is in
-         const req = await GuildModel.find({id: guild});
-         //Request the information
-         id = req.id;
-         prefix = req.prefix;
-         console.log(`Startup Information Fetched`)
-      } catch (e) {
-         console.log(e.stack)
-      }
-   })();
 });
 //Guild Create Event (When the bot joins a guild it logs the guild into the database)
 client.on('guildCreate',  async guild => {
@@ -51,44 +38,39 @@ client.on('guildCreate',  async guild => {
 });
 //Message Listener
 client.on('message', message => {
-   /*
-   if (message.content === "!sync" || !message.author.bot) {
       (async () => {
          try {
             const req = await GuildModel.findOne({id: message.guild.id});
-            id = req.id;
             prefix = req.prefix;
-            console.log(`${message.guild.id} database/information in use is now in sync`)
          } catch (e) {
             console.log(e.stack)
          }
-      })();
-   }
-    */
-   //If a message does not start with the prefix don't run it as a command
-   if (!message.content.startsWith(prefix) || message.author.bot) return;
-   //Set the command prefix
-   const args = message.content.slice(prefix.length).split(/ +/);
-   const commandName = args.shift().toLowerCase();
+      })().then(() => {
+         //If a message does not start with the prefix don't run it as a command
+         if (!message.content.startsWith(prefix) || message.author.bot) return;
+         //Set the command prefix
+         const args = message.content.slice(prefix.length).split(/ +/);
+         const commandName = args.shift().toLowerCase();
 
-   //Gets the commands by the name within the commands file
-   const command = client.commands.get(commandName)
-      || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-   //If it has the prefix but is not a command, return it and not run a command
-   if (!command) return;
+         //Gets the commands by the name within the commands file
+         const command = client.commands.get(commandName)
+            || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+         //If it has the prefix but is not a command, return it and not run a command
+         if (!command) return;
 
-   //Try to execute the command, if it doesn't work send the error message
-   try {
-      command.execute(message, args);
-      console.log(`${message.author.username} ran the command ${prefix}${commandName}`)
-   } catch (error) {
-      //Tell the user who executed the command that there was an error
-      message.reply('There was an error trying to execute that command! Please contact the bot developer.');
-      //state which command caused the error and in what guild it originated from
-      console.log(`${prefix}${commandName} had an error in (${message.guild.id})`);
-      //Log the command error
-      console.error(error);
-   }
+         //Try to execute the command, if it doesn't work send the error message
+         try {
+            command.execute(message, args);
+           console.log(`${message.guild.name} - ${message.author.username} ran ${commandName}`)
+       } catch (error) {
+            //Tell the user who executed the command that there was an error
+            message.reply('There was an error trying to execute that command! Please contact the bot developer.');
+            //state which command caused the error and in what guild it originated from
+            console.log(`${message.guild.name} - ${commandName} had an error!`);
+            //Log the command error
+            console.error(error);
+         }
+      })
 });
 
 //Message Reaction Add Event (When a user adds a reaction to a message)
@@ -106,7 +88,7 @@ client.on(`guildMemberRemove`, async member => {
 //Connections + Logins
 (async () => {
    //Connect to the MongoDB
-   await connect('Database URL', {
+   await connect(databaseURL, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true
