@@ -1,2 +1,2 @@
 # templateBot
-Discord.js Bot Template
+Discord.js Bot Template now using TypeScript

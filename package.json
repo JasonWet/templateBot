@@ -1,25 +1,23 @@
 {
-  "name": "src",
+  "name": "templatebot",
   "version": "1.0.0",
-  "description": "Discord.js Bot Template",
-  "main": "src/index.js",
+  "description": "Discord.js TemplateBot",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^12.4.0",
+    "file-system": "^2.2.2",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.10.9",
+    "npm": "^6.14.8"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JasonWet/templateBot"
+    "url": "git+https://github.com/JasonWet/templateBot.git"
   },
-  "author": "JasonWet",
+  "author": "Jason Dry",
   "license": "ISC",
-  "dependencies": {
-    "discord.js": "github:discordjs/discord.js",
-    "file-system": "^2.2.2",
-    "fs": "0.0.1-security",
-    "install": "^0.13.0",
-    "mongoose": "^5.9.6",
-    "npm": "^7.0.2",
-    "readdir": "^0.1.0",
-    "scandir": "^0.1.2"
-  }
 }
