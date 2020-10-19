@@ -1,0 +1,5 @@
+{
+  "token": "NTQ0NzM3NDk2NjU1ODU1NjE2.XGJMUw.IGx221NJfoF6QO8QMr1qJDY79wY",
+  "databaseURL": "mongodb+srv://templatebot:templatebot@cluster0-6dqif.azure.mongodb.net/templatebot?retryWrites=true&w=majority",
+  "prefix": "."
+}
