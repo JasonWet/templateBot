@@ -2,7 +2,9 @@ const fs = require('fs');
 const {client} = require('./index');
 
 module.exports = async () => {
-    // <==><==><==><==><==><==><==><==><==><==><==><==>CMD HANDLER<==><==><==><==><==><==><==><==><==><==><==><==>
+    /*
+        Command Handler
+     */
     console.log(`=> Commands:`)
     fs.readdirSync(`./commands/`).forEach(dir => {
         let commands = fs.readdirSync(`./commands/${dir}/`).filter(f => f.endsWith(".js"));
@@ -19,7 +21,9 @@ module.exports = async () => {
             }
         })
     });
-    //<==><==><==><==><==><==><==><==><==><==><==><==>EVENT HANDLER<==><==><==><==><==><==><==><==><==><==><==><==>
+    /*
+        Event Handler
+     */
     console.log(`=> Events:`)
     fs.readdir("./events/", (err, files) => {
         if (err) console.error(err);
