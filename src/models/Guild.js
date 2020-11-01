@@ -1,7 +1,7 @@
-const { Schema, model } =  require('mongoose');
+const { Schema, model } = require('mongoose');
 //Create a Schema
 const Guild = Schema({
-    id: Number,
+    id: String,
 });
 
 module.exports = model('Guild', Guild);
