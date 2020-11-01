@@ -1,14 +1,7 @@
 const { client } = require('../index');
 const conf = require('../conf.json');
-const { connect } = require('mongoose');
 
 (async () => {
-    //Connect to the MongoDB
-    await connect(config.databaseURI, {
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true
-    });
     //Login to the bot with the token
     return client.login(conf.token);
 })();
