@@ -1,5 +1,5 @@
 const { client } = require('../index');
-const config = require('../config.json');
+const conf = require('../conf.json');
 const GuildModel = require('../models/Guild')
 
 client.on('guildCreate', async (guild) => {
