@@ -1,16 +1,16 @@
 const { client } = require('../index');
-const config = require('../config.json');
+const conf = require('../conf.json');
 const { connect } = require('mongoose');
 
 (async () => {
     //Connect to the MongoDB
-    await connect(config.databaseURL, {
+    await connect(config.databaseURI, {
         useNewUrlParser: true,
         useFindAndModify: false,
         useUnifiedTopology: true
     });
     //Login to the bot with the token
-    return client.login(config.token);
+    return client.login(conf.token);
 })();
 
 client.on('ready', async () => {
@@ -18,9 +18,9 @@ client.on('ready', async () => {
     client.user.setPresence({
         status: 'idle',
         activity: {
-            name: 'Everything',
+            name: `${conf.activityMessage}`,
             type: 'WATCHING'
         }
     })
-    console.log(`${client.user.username} is now READY!`)
+    console.log(`${client.user.username} is now ready!`)
 });
