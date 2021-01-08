@@ -67,6 +67,7 @@ const init = async () => {
         client.on(eventName, event.bind(null, client));
     });
 
+    // Connect to the mongodb server
     await connect("...", {
         useNewUrlParser: true,
         useFindAndModify: false,
