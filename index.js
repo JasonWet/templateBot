@@ -67,8 +67,19 @@ const init = async () => {
         client.on(eventName, event.bind(null, client));
     });
 
+    await connect("...", {
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true
+    })
+        .catch((e) => {
+            return `Unable to connect to MongoDB: ${e}`
+        });
+    client.logger.log(`Connected to MongoDB`, "ready")
+
     // Login to the client using our private token from https://discord.com/developers/applications
     client.login(config.token);
+    client.logger.log(`Client has been logged in`, "ready")
 
 // End top-level async/await function.
 };
