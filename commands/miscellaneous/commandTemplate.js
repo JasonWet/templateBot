@@ -22,7 +22,7 @@ exports.conf = {
 // Sets the name, category, description and usage example for a command
 exports.help = {
     name: "template",
-    category: "Miscelaneous",
+    category: "Miscellaneous",
     description: "Command Template",
     usage: "template"
 };
