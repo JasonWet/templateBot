@@ -10,7 +10,7 @@ exports.conf = {
 
 exports.help = {
     name: "credits",
-    category: "Miscelaneous",
+    category: "Miscellaneous",
     description: "Template Credits Command",
     usage: "credits"
 };
