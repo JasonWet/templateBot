@@ -51,3 +51,12 @@ Once you have done that and it has finished downloading...
 #### Issues...
 
 If you come across any issues please open an issue on this repo or DM me on Discord @ **JasonWet#9999** or you can join my discord server @ **discord.gg/ndSEuKR**
+
+
+### Useful Notes
+
+###### Logger
+- In this template we use a custom logger that is brought over from the AnIdiotsGuide guideBot. This logger is used to format all logs in the nicest and most useful way possible making it easy to read and understand. 
+- Using the logger is simple. Instead of using ```js Console.log("Log")``` we use ```js client.logger.log("Log")```
+###### Functions
+- In this template we use a functions modules that allows us to create commonly used functions in a single place and allow them to be useable across all of our code. This is helpful to lower the clutter when it comes to reused code. For Exmaple if you are using trying to await a response you can use the function which would allow you to remove a large chunk of code from each step that requires you to await a response.
