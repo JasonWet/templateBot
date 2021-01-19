@@ -41,9 +41,7 @@ const init = async () => {
                 if (props.init) {
                     props.init(client);
                 }
-                /*
-                    Set the command names & aliases based off of the information provided in the command files
-                */
+                // Set the command names & aliases based off of the information provided in the command files
                 client.commands.set(props.help.name, props);
                 props.conf.aliases.forEach(alias => {
                     client.aliases.set(alias, props.help.name);
@@ -69,8 +67,6 @@ const init = async () => {
 
     // Login to the client using our private token from https://discord.com/developers/applications
     client.login(config.token);
-
-// End top-level async/await function.
 };
 
 init();
